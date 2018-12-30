@@ -6,13 +6,16 @@
  */
 #include "main_simulator.h"
 #include "World.h"
+#include "InputHandler.h"
 #include "Camera.h"
 #include "MovingObject.h"
 
 
 
-MainSimulator::MainSimulator() :
-		ApplicationContext("Real Time Plane - Simulation") {
+MainSimulator::MainSimulator() : ApplicationContext("Real Time Plane - Simulation") {
+	root = 0;
+	scnMgr = 0;
+	mTranslateCamera = 0;
 }
 
 MainSimulator::~MainSimulator() {
@@ -24,12 +27,9 @@ MainSimulator::~MainSimulator() {
 }
 
 void MainSimulator::loadResources() {
-	// Add our model to our resources and index it
-	ResourceGroupManager::getSingleton().addResourceLocation(
-			"Media/materials/textures/nvidia", "FileSystem");
-	ResourceGroupManager::getSingleton().addResourceLocation("Media/models/",
-			"FileSystem");
-
+	// Add our models to our resources and index it
+	ResourceGroupManager::getSingleton().addResourceLocation("Media/materials/textures/nvidia", "FileSystem");
+	ResourceGroupManager::getSingleton().addResourceLocation("Media/models/","FileSystem");
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
@@ -38,9 +38,8 @@ void MainSimulator::loadResources() {
 // add as many frame listeners as we want (and let the main rendering loop call them),
 // we would not have as much control over the order that the listeners are called --
 //  so we will just have one listener and handle everything ourselves.
-void MainSimulator::createFrameListener(void)
-{
-	mPongFrameListener = new MainListener(mWorld,mTranslateCamera);
+void MainSimulator::createFrameListener(void) {
+	mPongFrameListener = new MainListener(getRenderWindow(), mInputHandler, mWorld,mTranslateCamera);
 	mRoot->addFrameListener(mPongFrameListener);
 }
 
@@ -76,17 +75,14 @@ void MainSimulator::createLight() {
 	light->setSpecularColour(Ogre::ColourValue(0.4, 0.4, 0.4));
 }
 
-// Here is where we set up all of the non-rendering stuff (our world, various managers, etc)
-void MainSimulator::createScene()
-{
-	mWorld = new World(scnMgr, mTrayMgr);
 
+void MainSimulator::createCamera() {
 
 	bool followPlane = 1;
 	cam = scnMgr->createCamera("myCam");
 
 	if (followPlane) {
-		camNode = mWorld->getPlaneEmpty()->mObjectSceneNode->createChildSceneNode();
+		camNode = mWorld->getPlane()->mObjectSceneNode->createChildSceneNode();
 	}
 	else {
 		camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
@@ -95,12 +91,23 @@ void MainSimulator::createScene()
 
 	camNode->attachObject(cam);
 
+    mTranslateCamera = new TranslateCamera(cam, mWorld,mInputHandler,followPlane);
+}
+
+void MainSimulator::createViewports() {
+
 
 	Viewport* vp = getRenderWindow()->addViewport(cam);
 	vp->setBackgroundColour(ColourValue(0.2,0.3,0.4));
 	cam->setAspectRatio(Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
 
-    mTranslateCamera = new TranslateCamera(cam, mWorld, followPlane);
+}
+
+// Here is where we set up all of the non-rendering stuff (our world, various managers, etc)
+void MainSimulator::createScene() {
+    mInputHandler = new InputHandler(getRenderWindow());
+
+	mWorld = new World(scnMgr, mTrayMgr);
 }
 
 
@@ -132,12 +139,13 @@ void MainSimulator::setup() {
 
 	createScene();
 
+	createCamera();
+
+	createViewports();
+
     createFrameListener();
 
 	addInputListener(mTrayMgr);
-
-    //mAnimationState->setEnabled(true);
-    //mAnimationState->setLoop(true);
 
 }
 
@@ -148,8 +156,7 @@ bool MainSimulator::keyPressed(const KeyboardEvent& evt) {
 	return true;
 }
 
-void MainSimulator::destroyScene()
-{
+void MainSimulator::destroyScene() {
 	delete mPongFrameListener;
 	delete mWorld;
 	delete mTranslateCamera;
@@ -157,11 +164,9 @@ void MainSimulator::destroyScene()
 	delete scnMgr;
 	delete camNode;
 	delete cam;
-	delete mAnimationState;
 }
 
-void MainSimulator::go(void)
-{
+void MainSimulator::go(void) {
 
     initApp();
     root->startRendering();

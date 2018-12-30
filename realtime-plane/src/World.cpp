@@ -1,20 +1,9 @@
 #include "World.h"
-#include "Ogre.h"
-#include "OgreMath.h"
-#include "OgreSceneManager.h"
-#include "OgreSceneNode.h"
-#include "OgreVector3.h"
-#include "OgreSphere.h"
 #include "MovingObject.h"
-#include <iostream>
-#include <tgmath.h>
 
-#include "boost/thread.hpp"
+#include <pthread.h>
 
 using namespace Ogre;
-
-using namespace boost ;
-using namespace boost::this_thread;
 
 World::World(Ogre::SceneManager *sceneManager, OgreBites::TrayManager* traymgr) : mSceneManager(sceneManager),
 		mTrayMgr(traymgr),mInfoTextBox(0)
@@ -48,16 +37,6 @@ World::~World() {
 	delete lt;
 }
 
-// Global function called by thread
-void World::GlobalFunction()
-{
-	for (int i=0; i<10; ++i)
-	{
-		std::cout<< i << "Do something in parallel with main method." << std::endl;
-		//boost::this_thread::yield(); // 'yield' discussed in section 18.6
-	}
-}
-
 void World::Setup()
 {
 	mInfoTextBox = mTrayMgr->createTextBox(OgreBites::TL_TOPLEFT, "GeoLocationInfo", "Flight Details:", 250,140);
@@ -76,12 +55,12 @@ void World::Setup()
 
     // Plane
     mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneEmpty, Ogre::Vector3::UNIT_SCALE);
-    mPlane->setPosition(Ogre::Vector3(6400,30,0));
+    mPlane->setPosition(Ogre::Vector3(earth_radius,30,0));
 
 	Ogre::Radian theta = Ogre::Radian(Ogre::Math::PI * -90/180);
-    Ogre::Matrix3 rotateAroundY(1	, 0, 0,
-                         	 	0	, Ogre::Math::Cos(theta),  Ogre::Math::Sin(theta),
-								0,	-Ogre::Math::Sin(theta), Ogre::Math::Cos(theta));
+    Ogre::Matrix3 rotateAroundY(1	,	0						, 	0,
+                         	 	0	,	Ogre::Math::Cos(theta)	,	Ogre::Math::Sin(theta),
+								0	,	-Ogre::Math::Sin(theta)	, 	Ogre::Math::Cos(theta));
     mPlane->setOrientation(Ogre::Matrix3(rotateAroundY));
     mPlane->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
@@ -92,16 +71,17 @@ void World::Setup()
     mUVsphere = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,1,0.1));
 
     //north pole
-    mCube->setPosition(Ogre::Vector3(0, 0, 6400));
+    mCube->setPosition(Ogre::Vector3(0, 0, earth_radius));
     //south pole
-    mColumn->setPosition(Ogre::Vector3(0, 0, -6400));
+    mColumn->setPosition(Ogre::Vector3(0, 0, -earth_radius));
     // 0,0
-    mSibenik->setPosition(Ogre::Vector3(0, 6400, 0));
-    mUVsphere->setPosition(Ogre::Vector3(6400, 0, 0));
+    mSibenik->setPosition(Ogre::Vector3(0, earth_radius, 0));
+    mUVsphere->setPosition(Ogre::Vector3(earth_radius, 0, 0));
 }
 
 void World::Think(float time)
 {
+
 	 if (token==1) {
 
 		lt->fetchLiveData();
@@ -115,17 +95,12 @@ void World::Think(float time)
 
 		long_diff=lat_diff=0;
 
-		if (previous_long!=0 &&  previous_lat!=0) {
+		if (longitude!= previous_long)
+			long_diff = fake_long_diff = longitude - previous_long;
 
-			if (longitude!= previous_long)
-				long_diff = fake_long_diff = longitude - previous_long;
+		if (latitude!= previous_lat)
+			lat_diff = fake_lat_diff = latitude-previous_lat;
 
-
-			if (latitude!= previous_lat)
-				lat_diff = fake_lat_diff = latitude-previous_lat;
-
-			std::cout << "++++++++ Differences +++++++ lat_diff  : " << lat_diff << "longitude diff: " << long_diff << "\n";
-		}
 		previous_lat = latitude;
 		previous_long = longitude;
 
@@ -136,8 +111,10 @@ void World::Think(float time)
 		// set the inclination of the plane
 		//mPlane->rotate(Ogre::Quaternion(Ogre::Degree(20), Ogre::Vector3(1,0,0))); // ascending or descending
 
-		// set the direction of the plane
+		// set the direction/orientation of the plane
 		if (long_diff!=0 && lat_diff!=0) {
+
+			std::cout << ".............. lat_diff  : " << lat_diff << " .... longitude diff: " << long_diff << "\n";
 
 			Ogre::Radian zAngle = Ogre::Radian(Ogre::Math::PI * -90 /180);
 			Ogre::Matrix3 rotateAroundZ2(Ogre::Math::Cos(zAngle), -Ogre::Math::Sin(zAngle), 0,
@@ -145,24 +122,21 @@ void World::Think(float time)
 										0,                      0,                       1);
 
 			mPlane->setOrientation(Ogre::Matrix3(rotateAroundZ2));
-			Ogre::Radian thetan = Ogre::Math::Sign(lat_diff) * Ogre::Math::ATan2(Ogre::Math::Abs(lat_diff)/Ogre::Math::Abs(long_diff),Ogre::Math::Abs(long_diff)/Ogre::Math::Abs(lat_diff) );// Ogre::Radian(Ogre::Math::ASin(latitude/longitude) * 180.0 / Ogre::Math::PI);
 
+			Ogre::Radian thetan = Ogre::Math::Sign(lat_diff) * Ogre::Math::ATan2(Ogre::Math::Abs(lat_diff)/Ogre::Math::Abs(long_diff),Ogre::Math::Abs(long_diff)/Ogre::Math::Abs(lat_diff) );
 			std::cout << Ogre::Degree(thetan);
 
-			mPlane->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff) * (Ogre::Radian(Ogre::Math::PI * 90 / 180)+ Ogre::Degree(thetan))), Ogre::Vector3(0,1,0)));
+			mPlane->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff) * (Ogre::Radian(Ogre::Math::PI * 90 / 180)+ Ogre::Degree(thetan))),
+					Ogre::Vector3(0,1,0)));
 
 		}
 	}
-	else if (token==40) {
-		token = 0;
-		std::cout << "++++++++ Predicting +++++++ lat_diff  : " << lat_diff << "longitude diff: " << long_diff << "\n";
+	else if (token==100) {
+		token	= 0;
 	}
 	else {
-		latitude += fake_lat_diff*0.001;
-		longitude += fake_long_diff*0.001;
-		//mPlaneEmpty->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(lat_diff)*0.0001),Ogre::Vector3(0, 1, 0)));
-		//mPlaneEmpty->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff)*0.0001),Ogre::Vector3(0, 0, 1)));
-		//std::cout << "++++++++ Predicting +++++++ lat_diff  : " << lat_diff << "longitude diff: " << long_diff << "\n";
+		latitude	+= fake_lat_diff*0.001;
+		longitude	+= fake_long_diff*0.001;
 	}
 
 	// reset planeEmpty to lat,long 0,0

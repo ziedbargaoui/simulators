@@ -14,10 +14,7 @@ LiveTraffic::LiveTraffic() {
 
 LiveTraffic::~LiveTraffic() {
 	// TODO Auto-generated destructor stub
-}
-
-float LiveTraffic::getLongitude() const {
-	return longitude;
+	delete curl;
 }
 
 namespace
@@ -37,9 +34,9 @@ namespace
 
 void LiveTraffic::fetchLiveData() {
 
-    const std::string url("https://opensky-network.org/api/states/all?icao24=70c0ee");
+    std::string url("https://opensky-network.org/api/states/all?icao24="+icao24);
 
-    CURL* curl = curl_easy_init();
+    curl = curl_easy_init();
 
     // Set remote URL.
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -89,17 +86,12 @@ void LiveTraffic::fetchLiveData() {
                     jsonData["time"].asUInt64());
             const std::string timeString(jsonData["time"].asString());
 
-            std::cout << "Natively parsed:" << std::endl;
-            std::cout << "\tUnix timeMs: " << unixTimeMs << std::endl;
-
     		setFlight(jsonData["states"][0][1].asString());
     		setCountry(jsonData["states"][0][2].asString());
     		setLongitude(jsonData["states"][0][5].asDouble() );
     		setLatitude(jsonData["states"][0][6].asDouble());
     		setVerticalRate(jsonData["states"][0][11].asDouble());
     		setGeoAltitude(jsonData["states"][0][13].asDouble());
-
-            std::cout << std::endl;
         }
         else
         {
@@ -110,38 +102,6 @@ void LiveTraffic::fetchLiveData() {
     else
     {
         std::cout << "Couldn't GET from " << url << " - exiting" << std::endl;
-     }
-
-/*
-	http_client client(U("https://opensky-network.org/"));
-
-	http_response response;
-
-	// Build request URI and start the request.
-	uri_builder builder(U("/api/states/all"));
-	// builder.append_query(U("time"), U("1545746400"));
-	// builder.append_query(U("icao24"), U("abd9d9"));
-
-	response = client.request(methods::GET, builder.to_string()).get();
-
-	json::value flight_live_data = response.extract_json().get();
-
-	if (!flight_live_data[U("states")].is_null()) {
-		// && flight_live_data[U("states")][0][6]!= NULL && flight_live_data[U("states")][0][5] != NULL
-		json::value data = flight_live_data[U("states")][0];
-
-		std::cout << "flight data: " << data << "\n";
-
-		setFlight(data[1].as_string());
-		setCountry(data[2].as_string());
-		setLongitude(data[5].as_double());
-		setLatitude(data[6].as_double());
-		setVerticalRate(data[11].as_double());
-		setGeoAltitude(data[13].as_double());
-
-	}else {
-		throw std::runtime_error("no data");
-	}
-	*/
+    }
 }
 

@@ -18,7 +18,7 @@ class TranslateCamera;
 class MainListener : public Ogre::FrameListener
 {
 public:
-	MainListener(World *world, TranslateCamera *cam);
+	MainListener(Ogre::RenderWindow *mainWindow, InputHandler *inputHandler, World *world, TranslateCamera *cam);
 
 	bool frameStarted(const Ogre::FrameEvent &evt);
 
@@ -26,8 +26,10 @@ public:
 
 
 protected:
+	InputHandler *mInputHandler;
 	World *mWorld;
     TranslateCamera *mTranslateCamera;
+	Ogre::RenderWindow *mRenderWindow;
 	int x;
 };
 

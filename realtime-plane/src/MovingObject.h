@@ -2,8 +2,8 @@
 #include "OgreVector3.h"
 #include <iostream>
 
-class Ogre::SceneManager;
-class Ogre::SceneNode;
+//class Ogre::SceneManager;
+//class Ogre::SceneNode;
 
 class MovingObject
 {
@@ -17,10 +17,6 @@ public:
 
     void setOrientation(Ogre::Matrix3 orientation); 
     void setPosition(Ogre::Vector3 position);
-
-    void yaw(Ogre::Radian theta);
-    void pitch(Ogre::Radian theta);
-    void roll(Ogre::Radian theta);
 
     void translate(Ogre::Vector3 deltaPosition);
     void rotate(Ogre::Quaternion  q );

@@ -32,54 +32,6 @@ MovingObject::MovingObject(Ogre::SceneManager *sceneManager, const char *meshNam
     mOrientation = Ogre::Matrix3::IDENTITY;
 }
 
-void 
-MovingObject::yaw(Ogre::Radian theta)
-{
-	// TODO: Write me!
-    // Modify the mOrientation matrix so that it rotates theta radians
-    // around the y axis
-	// You probably want to create a new orientation matrix, and then multiply ...
-	//
-	//  Remember Ogre uses Column vectors (not row vectors!)
-
-
-	// Once we change our internal data structures, we will modify the OGRE 
-	// internals to actually move the models around
-	SetGraphicPosition();
-}
-
-void 
-MovingObject::pitch(Ogre::Radian theta)
-{
-	// TODO: Write me!
-    // Modify the mOrientation matrix so that it rotates theta radians
-    // around the x axis
-	// You probably want to create a new orientation matrix, and then multiply ...
-	//
-	// Remember Ogre uses Column vectors (not row vectors!)
-
-
-	// Once we change our internal data structures, we will modify the OGRE 
-	// internals to actually move the models around
-	SetGraphicPosition();
-}
-void
-MovingObject::roll(Ogre::Radian theta)
-{
-	// TODO: Write me!
-    // Modify the mOrientation matrix so that it rotates theta radians
-    // around the z axis
-	// You probably want to create a new orientation matrix, and then multiply ...
-	//
-	//  Remember Ogre uses Column vectors (not row vectors!)
-
-
-
-	// Once we change our internal data structures, we will modify the OGRE 
-	// internals to actually move the models around
-	SetGraphicPosition();
-}
-
 void MovingObject::translate(Ogre::Vector3 deltaPosition)
 {
 	mPosition = mPosition + deltaPosition;

@@ -37,78 +37,52 @@ public:
 	virtual ~LiveTraffic();
 	void fetchLiveData();
 
-	float getBaroAltitude() const {
-		return baro_altitude;
-	}
+	float getBaroAltitude() const {	return baro_altitude;}
 
-	void setBaroAltitude(float baroAltitude) {
-		baro_altitude = baroAltitude;
-	}
+	void setBaroAltitude(float baroAltitude) {	baro_altitude = baroAltitude;}
 
-	float getGeoAltitude() const {
-		return geo_altitude;
-	}
+	float getGeoAltitude() const {	return geo_altitude;}
 
-	void setGeoAltitude(float geoAltitude) {
-		geo_altitude = geoAltitude;
-	}
+	void setGeoAltitude(float geoAltitude) {geo_altitude = geoAltitude;	}
 
-	float getLatitude() const {
-		return latitude;
-	}
+	float getLatitude() const {	return latitude;}
 
-	void setLatitude(float latitude) {
-		this->latitude = latitude;
-	}
+	void setLatitude(float latitude) {this->latitude = latitude;}
 
-	float getLongitude() const;
+	float getLongitude() const {	return longitude;};
 
-	void setLongitude(float longitude) {
-		this->longitude = longitude;
-	}
+	void setLongitude(float longitude) {this->longitude = longitude;}
 
-	float getVelocity() const {
-		return velocity;
-	}
+	float getVelocity() const {	return velocity;}
 
-	void setVelocity(float velocity) {
-		this->velocity = velocity;
-	}
+	void setVelocity(float velocity) {	this->velocity = velocity;}
 
-	float getVerticalRate() const {
-		return vertical_rate;
-	}
+	float getVerticalRate() const {	return vertical_rate;}
 
-	void setVerticalRate(float verticalRate) {
-		vertical_rate = verticalRate;
-	}
+	void setVerticalRate(float verticalRate) {	vertical_rate = verticalRate;}
 
-	const std::string& getCountry() const {
-		return country;
-	}
+	const std::string& getCountry() const {	return country;	}
 
-	void setCountry(const std::string& country) {
-		this->country = country;
-	}
+	void setCountry(const std::string& country) {this->country = country;}
 
-	const std::string& getFlight() const {
-		return flight;
-	}
+	const std::string& getFlight() const {return flight;}
 
-	void setFlight(const std::string& flight) {
-		this->flight = flight;
-	}
+	void setFlight(const std::string& flight) {this->flight = flight;}
 
 protected:
+	CURL* curl;
+
+	std::string icao24 = "00b026";
 	std::string flight;
 	std::string country;
 
-	float longitude;
-	float latitude;
-	float baro_altitude;
-	float velocity;
-	float vertical_rate;
-	float geo_altitude;
+	int		time_position;
+	float	longitude;
+	float	latitude;
+	float	baro_altitude;
+	float	velocity;
+	float	vertical_rate;
+	float	geo_altitude;
 };
 
 #endif /* SRC_LIVETRAFFIC_H_ */

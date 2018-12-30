@@ -1,13 +1,20 @@
 #ifndef __World_h_
 #define __World_h_
 
+#include "Ogre.h"
+#include "OgreMath.h"
+#include "OgreSceneManager.h"
+#include "OgreSceneNode.h"
+#include "OgreVector3.h"
+#include "OgreSphere.h"
 #include "OgreVector3.h"
 #include "OgreRTShaderSystem.h"
 #include "OgreTrays.h"
 
 #include "LiveTraffic.h"
 
-#include <boost/thread.hpp>
+#include <iostream>
+#include <tgmath.h>
 
 
 namespace Ogre {
@@ -30,8 +37,6 @@ public:
     
 	void Setup();
 
-	void GlobalFunction();
-
 	MovingObject*& getPlaneEmpty()  {
 		return mPlaneEmpty;
 	}
@@ -40,9 +45,19 @@ public:
 		mPlaneEmpty = planeEmpty;
 	}
 
+	MovingObject*& getPlane()  {
+		return mPlane;
+	}
+
+	void setPlane( MovingObject*& plane) {
+		mPlane = plane;
+	}
+
 protected:
 
 	int token = 0;
+
+	float earth_radius = 6400;
 
 	float longitude;
 	float latitude;

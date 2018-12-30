@@ -27,6 +27,8 @@
 using namespace Ogre;
 using namespace OgreBites;
 
+class InputHandler;
+
 class MainSimulator: public ApplicationContext, public InputListener, public TrayListener {
 
 public:
@@ -65,6 +67,7 @@ protected:
 
 
 	MainListener *mPongFrameListener;
+	InputHandler *mInputHandler;
 
 	bool mShutdown;
 	World *mWorld;
@@ -77,13 +80,7 @@ protected:
 	Ogre::String mResourcesCfg;
 	Ogre::String mPluginsCfg;
 
-	// Animation
-
-    Ogre::AnimationState* mAnimationState;
-    double mElapsedTime;
-
     TrayManager* mTrayMgr;
-    OgreBites::Label* mInfoLabel;
 
 };
 
