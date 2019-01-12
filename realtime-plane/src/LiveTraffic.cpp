@@ -63,9 +63,11 @@ void LiveTraffic::fetchLiveData() {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, httpData.get());
 
     // Run our HTTP GET command, capture the HTTP response code, and clean up.
+
     curl_easy_perform(curl);
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
     curl_easy_cleanup(curl);
+
 
     if (httpCode != CURLE_HTTP_RETURNED_ERROR)
     {
@@ -80,7 +82,7 @@ void LiveTraffic::fetchLiveData() {
         {
             std::cout << "Successfully parsed JSON data" << std::endl;
             std::cout << "\nJSON data received:" << std::endl;
-            std::cout << jsonData.toStyledString() << std::endl;
+            std::cout << jsonData["states"][0].toStyledString() << std::endl;
 
             const std::size_t unixTimeMs(
                     jsonData["time"].asUInt64());

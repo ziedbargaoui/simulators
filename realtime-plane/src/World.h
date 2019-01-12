@@ -12,9 +12,11 @@
 #include "OgreTrays.h"
 
 #include "LiveTraffic.h"
+#include "ThreadData.h"
 
 #include <iostream>
 #include <tgmath.h>
+#include <string>
 
 
 namespace Ogre {
@@ -53,32 +55,47 @@ public:
 		mPlane = plane;
 	}
 
+	MovingObject*& getPlaneCentralEmpty() {
+		return mPlaneCentralEmpty;
+	}
+
+	void setPlaneCentralEmpty(MovingObject*& planeCentralEmpty) {
+		mPlaneCentralEmpty = planeCentralEmpty;
+	}
+
 protected:
 
 	int token = 0;
-
+	bool fetch_via_thread = true;
 	float earth_radius = 6400;
 
-	float longitude;
-	float latitude;
-	float baro_altitude;
-	float velocity;
-	float vertical_rate;
-	float geo_altitude;
+	float longitude=0;
+	float latitude=0;
+	float baro_altitude=0;
+	float velocity=0;
+	float vertical_rate=0;
+	float geo_altitude=0;
+	std::string country;
+	std::string flight;
 
 	float previous_lat=0;
 	float previous_long=0;
 
-	float lat_diff;
-	float long_diff;
+	float lat_diff=0;
+	float long_diff=0;
 
-	float fake_lat_diff;
-	float fake_long_diff;
+	float fake_lat_diff=0;
+	float fake_long_diff=0;
 	 
-    Ogre::SceneManager *mSceneManager; 
+    Ogre::SceneManager *mSceneManager;
+    OgreBites::TrayManager* mTrayMgr;
+    OgreBites::TextBox* mInfoTextBox;
 
     MovingObject *mPlane;
     MovingObject *mPlaneEmpty;
+
+    MovingObject *mRealPlane;
+    MovingObject *mPlaneCentralEmpty;
 
     MovingObject *mCube;
     MovingObject *mSibenik;
@@ -86,12 +103,9 @@ protected:
     MovingObject *mColumn;
     MovingObject *mUVsphere;
 
-    OgreBites::TrayManager* mTrayMgr;
-
-    OgreBites::TextBox* mInfoTextBox;
-
     LiveTraffic *lt;
-
+	pthread_t tt;
+	ThreadData tdata;
 
 };
 

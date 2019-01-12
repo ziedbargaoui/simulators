@@ -11,15 +11,15 @@ TranslateCamera::TranslateCamera(Ogre::Camera *renderCamera, World *world, Input
 mRenderCamera(renderCamera), mWorld(world)
 {
 	if (followPlane) {
-		if (false) {
-			mRenderCamera->setPosition(Ogre::Vector3(10,80,300));
-			mRenderCamera->setDirection(Ogre::Vector3(-2,-0.6,0));
+		if (true) {
+			mRenderCamera->setPosition(Ogre::Vector3(500,150,500));
+			mRenderCamera->setDirection(Ogre::Vector3(-2,-0.6,2));
 		} else {
 			mRenderCamera->setPosition(Ogre::Vector3(50,7300,7600));
 			mRenderCamera->setDirection(Ogre::Vector3(-2,-2,0));
 		}
 	} else {
-		mRenderCamera->setPosition(Ogre::Vector3(11000,0,0)); // viem on Europe/Africa
+		mRenderCamera->setPosition(Ogre::Vector3(18000,0,0)); // viem on Europe/Africa
 		//mRenderCamera->setPosition(Ogre::Vector3(0,0,-3200)); // view on the Americas
 		mRenderCamera->lookAt(Ogre::Vector3(0,0,0));
 	}
@@ -37,10 +37,14 @@ void TranslateCamera::Think(float time)
 	//mRenderCamera->move(Ogre::Vector3(-1,0.3,0.9));
 	// Any code needed here to move the camera about per frame
 	//  (use mRenderCamera to get the actual render camera, of course!)
-	// mRenderCamera->getParentNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+	mRenderCamera->getParentNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
 }
 
-void TranslateCamera::zoom(float time)
+void TranslateCamera::zoom(float time, bool zoomIn=true)
 {
-	mRenderCamera->getParentNode()->translate(Ogre::Vector3(1,1,1));  //rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+	if (zoomIn) {
+		mRenderCamera->move(Ogre::Vector3(210,50,210));  //rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+	} else {
+		mRenderCamera->move(Ogre::Vector3(-210,-50,-210));  //rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+	}
 }

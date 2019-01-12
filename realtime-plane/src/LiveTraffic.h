@@ -72,7 +72,7 @@ public:
 protected:
 	CURL* curl;
 
-	std::string icao24 = "00b026";
+	std::string icao24 = "";
 	std::string flight;
 	std::string country;
 

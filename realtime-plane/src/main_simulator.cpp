@@ -30,6 +30,8 @@ void MainSimulator::loadResources() {
 	// Add our models to our resources and index it
 	ResourceGroupManager::getSingleton().addResourceLocation("Media/materials/textures/nvidia", "FileSystem");
 	ResourceGroupManager::getSingleton().addResourceLocation("Media/models/","FileSystem");
+	ResourceGroupManager::getSingleton().addResourceLocation("content/models/","FileSystem");
+
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
@@ -78,11 +80,11 @@ void MainSimulator::createLight() {
 
 void MainSimulator::createCamera() {
 
-	bool followPlane = 1;
+	bool followPlane =1;
 	cam = scnMgr->createCamera("myCam");
 
 	if (followPlane) {
-		camNode = mWorld->getPlane()->mObjectSceneNode->createChildSceneNode();
+		camNode = mWorld->getPlaneCentralEmpty()->mObjectSceneNode->createChildSceneNode();
 	}
 	else {
 		camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
@@ -117,8 +119,8 @@ void MainSimulator::createSpecialDebugMenu() {
 	// create a tray interface
 	mTrayMgr = new TrayManager("SampleControls", getRenderWindow(), this);
 	// show stats and logo and hide the cursor
-	//mTrayMgr->showFrameStats(TL_BOTTOMLEFT);
-	//mTrayMgr->showLogo(TL_BOTTOMRIGHT);
+	// mTrayMgr->showFrameStats(TL_BOTTOMLEFT);
+	// mTrayMgr->showLogo(TL_BOTTOMRIGHT);
 	mTrayMgr->hideCursor();
 }
 

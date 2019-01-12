@@ -1,6 +1,5 @@
 #include "World.h"
 #include "MovingObject.h"
-
 #include <pthread.h>
 
 using namespace Ogre;
@@ -43,26 +42,36 @@ void World::Setup()
 
 	// Set up Earth
     //mEarthObj = new MovingObject(mSceneManager, "geosphere8000.mesh", NULL, Ogre::Vector3(31,31,31));
-    mEarthObj = new MovingObject(mSceneManager, "Earth.mesh", NULL, Ogre::Vector3(1600,1600,1600));
+    mEarthObj = new MovingObject(mSceneManager, "GlobeX.mesh", NULL, Ogre::Vector3(90,90,90));
 
     mEarthObj->setPosition(Ogre::Vector3(0, 0, 0));
-    mEarthObj->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(1,1.06,0.05)));
+    mEarthObj->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,1,0)));
 
     mPlaneEmpty = new MovingObject(mSceneManager, "sphere.mesh", NULL, Ogre::Vector3::UNIT_SCALE);
     mPlaneEmpty->setPosition(Ogre::Vector3(0, 0, 0));
 	mPlaneEmpty->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)));
-	setPlaneEmpty(mPlaneEmpty);
-
-    // Plane
-    mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneEmpty, Ogre::Vector3::UNIT_SCALE);
-    mPlane->setPosition(Ogre::Vector3(earth_radius,30,0));
 
 	Ogre::Radian theta = Ogre::Radian(Ogre::Math::PI * -90/180);
     Ogre::Matrix3 rotateAroundY(1	,	0						, 	0,
                          	 	0	,	Ogre::Math::Cos(theta)	,	Ogre::Math::Sin(theta),
 								0	,	-Ogre::Math::Sin(theta)	, 	Ogre::Math::Cos(theta));
-    mPlane->setOrientation(Ogre::Matrix3(rotateAroundY));
-    mPlane->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
+
+    // test *****
+    mPlaneCentralEmpty = new MovingObject(mSceneManager, "fish.mesh", mPlaneEmpty, Ogre::Vector3(0.2,0.2,0.2));
+    mPlaneCentralEmpty->setPosition(Ogre::Vector3(earth_radius+25,0,0));
+    mPlaneCentralEmpty->setOrientation(Ogre::Matrix3(rotateAroundY));
+    mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
+
+    // Real Plane
+    mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
+
+    // **** test
+
+    // Plane
+    //mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneEmpty, Ogre::Vector3::UNIT_SCALE);
+    //mPlane->setPosition(Ogre::Vector3(earth_radius,30,0));
+    //mPlane->setOrientation(Ogre::Matrix3(rotateAroundY));
+    //mPlane->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
 
     mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
@@ -78,18 +87,44 @@ void World::Setup()
     mSibenik->setPosition(Ogre::Vector3(0, earth_radius, 0));
     mUVsphere->setPosition(Ogre::Vector3(earth_radius, 0, 0));
 }
+//This function will be called from a thread
+
+void *call_from_thread(void *args) {
+	ThreadData* my_data = (ThreadData*) args;
+    my_data->live_traffic->fetchLiveData();
+    my_data->longitude 		= my_data->live_traffic->getLongitude();
+    my_data->latitude 		= my_data->live_traffic->getLatitude();
+    my_data->flight 		= my_data->live_traffic->getFlight();
+    my_data->country 		= my_data->live_traffic->getCountry();
+
+    std::cout << "Launched by thread " << my_data->thread_id << std::endl;
+    return NULL;
+}
 
 void World::Think(float time)
 {
 
 	 if (token==1) {
 
-		lt->fetchLiveData();
+		 if (fetch_via_thread) {
+			tdata.thread_id = 0;
+			int ret = pthread_create(&tt, NULL, call_from_thread, (void *) &tdata);
+			//pthread_join(tt, NULL);
+			longitude	= tdata.longitude;
+			latitude	= tdata.latitude;
+			flight		= tdata.flight;
+			country		= tdata.country;
 
-		longitude 		= lt->getLongitude();
-		latitude 		= lt->getLatitude();
-		vertical_rate 	= lt->getVerticalRate();
-		geo_altitude 	= lt->getGeoAltitude();
+		 } else {
+			 lt->fetchLiveData();
+			 longitude	= lt->getLongitude();
+			 latitude	= lt->getLatitude();
+			 flight		= lt->getFlight();
+			 country	= lt->getCountry();
+			 //vertical_rate 	= td->live_traffic->getVerticalRate();
+			 //geo_altitude 	= td->live_traffic->getGeoAltitude();
+		 }
+
 
 		std::cout << "*** lat,long *** " << latitude << "," << longitude <<   "\n";
 
@@ -106,7 +141,7 @@ void World::Think(float time)
 
 		// debugging the flight details to the screen #output #text
 		mInfoTextBox->show();
-		mInfoTextBox->setText("Flight: "+lt->getFlight()+"\nCountry: "+ lt->getCountry()+"\nLatitude: "+std::to_string(latitude)+"\nLongitude: "+std::to_string(longitude));
+		mInfoTextBox->setText("Flight: "+flight+"\nCountry: "+ country +"\nLatitude: "+std::to_string(latitude)+"\nLongitude: "+std::to_string(longitude));
 
 		// set the inclination of the plane
 		//mPlane->rotate(Ogre::Quaternion(Ogre::Degree(20), Ogre::Vector3(1,0,0))); // ascending or descending
@@ -120,23 +155,30 @@ void World::Think(float time)
 			Ogre::Matrix3 rotateAroundZ2(Ogre::Math::Cos(zAngle), -Ogre::Math::Sin(zAngle), 0,
 										Ogre::Math::Sin(zAngle), Ogre::Math::Cos(zAngle),  0,
 										0,                      0,                       1);
-
-			mPlane->setOrientation(Ogre::Matrix3(rotateAroundZ2));
-
 			Ogre::Radian thetan = Ogre::Math::Sign(lat_diff) * Ogre::Math::ATan2(Ogre::Math::Abs(lat_diff)/Ogre::Math::Abs(long_diff),Ogre::Math::Abs(long_diff)/Ogre::Math::Abs(lat_diff) );
-			std::cout << Ogre::Degree(thetan);
 
-			mPlane->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff) * (Ogre::Radian(Ogre::Math::PI * 90 / 180)+ Ogre::Degree(thetan))),
+			//mPlane->setOrientation(Ogre::Matrix3(rotateAroundZ2));
+			//mPlane->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff) * (Ogre::Radian(Ogre::Math::PI * 90 / 180)+ Ogre::Degree(thetan))),
+			//		Ogre::Vector3(0,1,0)));
+
+			// test plane
+			mPlaneCentralEmpty->setOrientation(Ogre::Matrix3(rotateAroundZ2));
+			mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(Ogre::Math::Sign(long_diff) * (Ogre::Radian(Ogre::Math::PI * 90 / 180)+ Ogre::Degree(thetan))),
 					Ogre::Vector3(0,1,0)));
 
 		}
+
+		std::cout << ".........*******++++++++++++*********.....";
 	}
-	else if (token==100) {
+	else if (token==380) {
 		token	= 0;
 	}
 	else {
-		latitude	+= fake_lat_diff*0.001;
-		longitude	+= fake_long_diff*0.001;
+		if (fake_lat_diff!=latitude)
+			latitude	+= fake_lat_diff*0.001;
+
+		if (fake_long_diff!=longitude)
+			longitude	+= fake_long_diff*0.001;
 	}
 
 	// reset planeEmpty to lat,long 0,0

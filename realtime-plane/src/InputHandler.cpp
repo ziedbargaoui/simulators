@@ -38,8 +38,66 @@ void InputHandler::Think(float time)
 }
 
 
+bool InputHandler::keyPressed( const OIS::KeyEvent &e ) {
+    itKeyListener    = mKeyListeners.begin();
+    itKeyListenerEnd = mKeyListeners.end();
+    for(; itKeyListener != itKeyListenerEnd; ++itKeyListener ) {
+        if(!itKeyListener->second->keyPressed( e ))
+			break;
+    }
+
+    return true;
+}
+
+bool InputHandler::keyReleased( const OIS::KeyEvent &e ) {
+    itKeyListener    = mKeyListeners.begin();
+    itKeyListenerEnd = mKeyListeners.end();
+    for(; itKeyListener != itKeyListenerEnd; ++itKeyListener ) {
+        if(!itKeyListener->second->keyReleased( e ))
+			break;
+    }
+
+    return true;
+}
+
+bool InputHandler::mouseMoved( const OIS::MouseEvent &e ) {
+    itMouseListener    = mMouseListeners.begin();
+    itMouseListenerEnd = mMouseListeners.end();
+    for(; itMouseListener != itMouseListenerEnd; ++itMouseListener ) {
+        if(!itMouseListener->second->mouseMoved( e ))
+			break;
+    }
+
+    return true;
+}
+
+bool InputHandler::mousePressed( const OIS::MouseEvent &e, OIS::MouseButtonID id ) {
+    itMouseListener    = mMouseListeners.begin();
+    itMouseListenerEnd = mMouseListeners.end();
+    for(; itMouseListener != itMouseListenerEnd; ++itMouseListener ) {
+        if(!itMouseListener->second->mousePressed( e, id ))
+			break;
+    }
+
+    return true;
+}
+
+bool InputHandler::mouseReleased( const OIS::MouseEvent &e, OIS::MouseButtonID id ) {
+    itMouseListener    = mMouseListeners.begin();
+    itMouseListenerEnd = mMouseListeners.end();
+    for(; itMouseListener != itMouseListenerEnd; ++itMouseListener ) {
+        if(!itMouseListener->second->mouseReleased( e, id ))
+			break;
+    }
+
+    return true;
+}
+
+
 InputHandler::~InputHandler()
 {
 	mInputManager->destroyInputObject(mCurrentKeyboard);
 }
+
+
 
