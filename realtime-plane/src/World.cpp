@@ -2,6 +2,7 @@
 #include "MovingObject.h"
 #include <pthread.h>
 
+using namespace std;
 using namespace Ogre;
 
 World::World(Ogre::SceneManager *sceneManager, OgreBites::TrayManager* traymgr) : mSceneManager(sceneManager),
@@ -92,12 +93,12 @@ void World::Setup()
 void *call_from_thread(void *args) {
 	ThreadData* my_data = (ThreadData*) args;
     my_data->live_traffic->fetchLiveData();
-    my_data->longitude 		= my_data->live_traffic->getLongitude();
-    my_data->latitude 		= my_data->live_traffic->getLatitude();
-    my_data->flight 		= my_data->live_traffic->getFlight();
-    my_data->country 		= my_data->live_traffic->getCountry();
+    my_data->setLongitude(my_data->live_traffic->getLongitude());
+    my_data->setLatitude(my_data->live_traffic->getLatitude());
+    my_data->setFlight(my_data->live_traffic->getFlight());
+    my_data->setCountry(my_data->live_traffic->getCountry());
 
-    std::cout << "Launched by thread " << my_data->thread_id << std::endl;
+    cout << "Launched by thread " << my_data->thread_id << endl;
     return NULL;
 }
 
@@ -110,10 +111,10 @@ void World::Think(float time)
 			tdata.thread_id = 0;
 			int ret = pthread_create(&tt, NULL, call_from_thread, (void *) &tdata);
 			//pthread_join(tt, NULL);
-			longitude	= tdata.longitude;
-			latitude	= tdata.latitude;
-			flight		= tdata.flight;
-			country		= tdata.country;
+			longitude	= tdata.getLongitude();
+			latitude	= tdata.getLatitude();
+			flight		= tdata.getFlight();
+			country		= tdata.getCountry();
 
 		 } else {
 			 lt->fetchLiveData();
@@ -126,7 +127,7 @@ void World::Think(float time)
 		 }
 
 
-		std::cout << "*** lat,long *** " << latitude << "," << longitude <<   "\n";
+		cout << "*** lat,long *** " << latitude << "," << longitude <<   "\n";
 
 		long_diff=lat_diff=0;
 
@@ -141,7 +142,7 @@ void World::Think(float time)
 
 		// debugging the flight details to the screen #output #text
 		mInfoTextBox->show();
-		mInfoTextBox->setText("Flight: "+flight+"\nCountry: "+ country +"\nLatitude: "+std::to_string(latitude)+"\nLongitude: "+std::to_string(longitude));
+		mInfoTextBox->setText("Flight: "+flight+"\nCountry: "+ country +"\nLatitude: "+to_string(latitude)+"\nLongitude: "+to_string(longitude));
 
 		// set the inclination of the plane
 		//mPlane->rotate(Ogre::Quaternion(Ogre::Degree(20), Ogre::Vector3(1,0,0))); // ascending or descending
@@ -149,7 +150,7 @@ void World::Think(float time)
 		// set the direction/orientation of the plane
 		if (long_diff!=0 && lat_diff!=0) {
 
-			std::cout << ".............. lat_diff  : " << lat_diff << " .... longitude diff: " << long_diff << "\n";
+			cout << ".............. lat_diff  : " << lat_diff << " .... longitude diff: " << long_diff << "\n";
 
 			Ogre::Radian zAngle = Ogre::Radian(Ogre::Math::PI * -90 /180);
 			Ogre::Matrix3 rotateAroundZ2(Ogre::Math::Cos(zAngle), -Ogre::Math::Sin(zAngle), 0,
@@ -168,7 +169,7 @@ void World::Think(float time)
 
 		}
 
-		std::cout << ".........*******++++++++++++*********.....";
+		cout << ".........*******++++++++++++*********.....";
 	}
 	else if (token==380) {
 		token	= 0;

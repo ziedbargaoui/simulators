@@ -84,8 +84,7 @@ void LiveTraffic::fetchLiveData() {
             std::cout << "\nJSON data received:" << std::endl;
             std::cout << jsonData["states"][0].toStyledString() << std::endl;
 
-            const std::size_t unixTimeMs(
-                    jsonData["time"].asUInt64());
+            const std::size_t unixTimeMs(jsonData["time"].asUInt64());
             const std::string timeString(jsonData["time"].asString());
 
     		setFlight(jsonData["states"][0][1].asString());

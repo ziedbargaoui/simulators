@@ -98,11 +98,9 @@ void MainSimulator::createCamera() {
 
 void MainSimulator::createViewports() {
 
-
 	Viewport* vp = getRenderWindow()->addViewport(cam);
 	vp->setBackgroundColour(ColourValue(0.2,0.3,0.4));
 	cam->setAspectRatio(Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
-
 }
 
 // Here is where we set up all of the non-rendering stuff (our world, various managers, etc)
