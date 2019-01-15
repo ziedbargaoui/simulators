@@ -1,6 +1,6 @@
 This is a C++ real time flight 3D simulator.
 
-** REQUIREMENTS **
+= REQUIREMENTS =
 
 1) Input from user should be an icao24 plane identifier.
 	If no data is available for the entered icao24, then the user can choose to select a random flight.
