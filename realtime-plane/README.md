@@ -7,7 +7,7 @@ The application is developed using the c++ based Ogre3D rendering engine. the mi
 
 ## How it looks like
 
-![](Peek 2019-01-24 16-06.gif)
+![](flight-simultation.gif) 
 
 # Requirements
 
