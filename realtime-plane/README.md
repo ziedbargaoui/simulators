@@ -5,6 +5,10 @@ This project, consists of a live 3D simulation of a flight using real-time data 
 Specifications
 The application is developed using the c++ based Ogre3D rendering engine. the minimum required version is c++1, boost library 1.67 and Ogre 1.11.3.
 
+## How it looks like
+
+![](Peek 2019-01-24 16-06.gif)
+
 # Requirements
 
 1) Input from user should be an icao24 plane identifier.
