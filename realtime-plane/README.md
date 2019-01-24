@@ -14,7 +14,7 @@ The application is developed using the c++ based Ogre3D rendering engine. the mi
 3) The screen should show the correct part of the world over which the plane is currently flying.
 4) The current time of the day should be honoured by setting the correct lightening of the scene (day/night).
 
-# IMPLEMENTATION  
+# Implementation  
 
 ## C++ Version 
 The minimum version required to build this project is c++14.
