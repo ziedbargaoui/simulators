@@ -17,7 +17,7 @@
 #include <string>
 
 #include <curl/curl.h>
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 
 #ifndef SRC_LIVETRAFFIC_H_
 #define SRC_LIVETRAFFIC_H_

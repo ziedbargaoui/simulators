@@ -42,11 +42,12 @@ void World::Setup()
 	mInfoTextBox = mTrayMgr->createTextBox(OgreBites::TL_TOPLEFT, "GeoLocationInfo", "Flight Details:", 250,140);
 
 	// Set up Earth
-    //mEarthObj = new MovingObject(mSceneManager, "geosphere8000.mesh", NULL, Ogre::Vector3(31,31,31));
-    mEarthObj = new MovingObject(mSceneManager, "GlobeX.mesh", NULL, Ogre::Vector3(90,90,90));
+    mEarthObj = new MovingObject(mSceneManager, "geosphere8000.mesh", NULL, Ogre::Vector3(31,31,31));
+    //mEarthObj = new MovingObject(mSceneManager, "GlobeX.mesh", NULL, Ogre::Vector3(90,90,90));
 
     mEarthObj->setPosition(Ogre::Vector3(0, 0, 0));
     mEarthObj->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,1,0)));
+
 
     mPlaneEmpty = new MovingObject(mSceneManager, "sphere.mesh", NULL, Ogre::Vector3::UNIT_SCALE);
     mPlaneEmpty->setPosition(Ogre::Vector3(0, 0, 0));
@@ -64,15 +65,12 @@ void World::Setup()
     mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
     // Real Plane
-    mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
+    //mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
 
     // **** test
 
     // Plane
-    //mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneEmpty, Ogre::Vector3::UNIT_SCALE);
-    //mPlane->setPosition(Ogre::Vector3(earth_radius,30,0));
-    //mPlane->setOrientation(Ogre::Matrix3(rotateAroundY));
-    //mPlane->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
+    mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
 
 
     mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
@@ -87,6 +85,8 @@ void World::Setup()
     // 0,0
     mSibenik->setPosition(Ogre::Vector3(0, earth_radius, 0));
     mUVsphere->setPosition(Ogre::Vector3(earth_radius, 0, 0));
+
+
 }
 //This function will be called from a thread
 
@@ -99,6 +99,7 @@ void *call_from_thread(void *args) {
     my_data->setCountry(my_data->live_traffic->getCountry());
 
     cout << "Launched by thread " << my_data->thread_id << endl;
+
     return NULL;
 }
 
@@ -192,4 +193,5 @@ void World::Think(float time)
 	mPlaneEmpty->rotate(Ogre::Quaternion(Ogre::Degree(latitude),Ogre::Vector3(0, 1, 0)));
 
 	token++;
+
 }

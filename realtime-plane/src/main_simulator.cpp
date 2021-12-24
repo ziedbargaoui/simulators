@@ -49,6 +49,7 @@ void MainSimulator::createLight() {
 
 	Light* light = scnMgr->createLight("MainLight");
 	light->setType(Ogre::Light::LT_POINT);
+
 	// Set Light Color
 	light->setDiffuseColour(54.0f, 1.0f, 1.0f);
 
@@ -80,7 +81,7 @@ void MainSimulator::createLight() {
 
 void MainSimulator::createCamera() {
 
-	bool followPlane =1;
+	bool followPlane =0;
 	cam = scnMgr->createCamera("myCam");
 
 	if (followPlane) {
@@ -118,7 +119,7 @@ void MainSimulator::createSpecialDebugMenu() {
 	mTrayMgr = new TrayManager("SampleControls", getRenderWindow(), this);
 	// show stats and logo and hide the cursor
 	// mTrayMgr->showFrameStats(TL_BOTTOMLEFT);
-	// mTrayMgr->showLogo(TL_BOTTOMRIGHT);
+	mTrayMgr->showLogo(TL_BOTTOMRIGHT);
 	mTrayMgr->hideCursor();
 }
 
@@ -143,7 +144,7 @@ void MainSimulator::setup() {
 
 	createViewports();
 
-    createFrameListener();
+	createFrameListener();
 
 	addInputListener(mTrayMgr);
 
