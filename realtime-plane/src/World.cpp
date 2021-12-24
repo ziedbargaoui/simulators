@@ -51,7 +51,7 @@ void World::Setup()
 
     mPlaneEmpty = new MovingObject(mSceneManager, "sphere.mesh", NULL, Ogre::Vector3::UNIT_SCALE);
     mPlaneEmpty->setPosition(Ogre::Vector3(0, 0, 0));
-	mPlaneEmpty->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(0,0,1)));
+
 
 	Ogre::Radian theta = Ogre::Radian(Ogre::Math::PI * -90/180);
     Ogre::Matrix3 rotateAroundY(1	,	0						, 	0,
@@ -64,13 +64,8 @@ void World::Setup()
     mPlaneCentralEmpty->setOrientation(Ogre::Matrix3(rotateAroundY));
     mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
-    // Real Plane
-    //mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
-
-    // **** test
-
-    // Plane
-    mPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
+    // Real Plane plane747
+    mRealPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
 
 
     mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
