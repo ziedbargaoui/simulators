@@ -89,6 +89,6 @@ void MovingObject::GetWorldPositionAndOrientation(Ogre::Vector3 &position, Ogre:
 	//
 	//  Remember Ogre uses Column vectors (not row vectors!), so rotating vector v by matrix M would be M * v, not v * M.
 
-    position = mPosition;
+	position = mPosition;
 	orientation = mOrientation;
 }

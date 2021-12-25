@@ -11,7 +11,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -lfreetype -lcurl -lOIS -ljso
 find_package(OGRE 1.11 REQUIRED COMPONENTS Bites RTShaderSystem)
 
 # copy resource.cfg next to our binaries where OGRE looks for it
-file(COPY ${OGRE_CONFIG_DIR}/resources.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY resources.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY content DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # add the source files as usual
 
@@ -37,7 +38,7 @@ target_link_libraries(Camera ${OGRE_LIBRARIES})
 add_library(MainListener src/MainListener.cpp)
 target_link_libraries(MainListener Camera ${OGRE_LIBRARIES})
 
-add_library(MainSimulator src/main_simulator.cpp)
+add_library(MainSimulator src/MainSimulator.cpp)
 target_link_libraries(MainSimulator MainListener World ${OGRE_LIBRARIES})
 
 

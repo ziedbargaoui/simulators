@@ -32,6 +32,8 @@ public:
 	
     World(Ogre::SceneManager *sceneManager, OgreBites::TrayManager* traymgr);
     virtual ~World();
+    MovingObject *mPlane;
+    MovingObject *mRealPlane;
 
     // You'll want various methods to access & change your world here
     
@@ -91,10 +93,8 @@ protected:
     OgreBites::TrayManager* mTrayMgr;
     OgreBites::TextBox* mInfoTextBox;
 
-    MovingObject *mPlane;
     MovingObject *mPlaneEmpty;
 
-    MovingObject *mRealPlane;
     MovingObject *mPlaneCentralEmpty;
 
     MovingObject *mCube;

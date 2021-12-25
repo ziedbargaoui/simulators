@@ -8,17 +8,14 @@ using namespace Ogre;
 World::World(Ogre::SceneManager *sceneManager, OgreBites::TrayManager* traymgr) : mSceneManager(sceneManager),
 		mTrayMgr(traymgr),mInfoTextBox(0)
 {
-
 	lt = new LiveTraffic();
 
 	// register our scene with the RTSS
 	RTShader::ShaderGenerator* shadergen =
 			RTShader::ShaderGenerator::getSingletonPtr();
 	shadergen->addSceneManager(mSceneManager);
-
-
-    mSceneManager->setAmbientLight(ColourValue(1,1,1));
-    Setup();
+	mSceneManager->setAmbientLight(ColourValue(1,1,1));
+	Setup();
 }
 
 World::~World() {
@@ -42,12 +39,9 @@ void World::Setup()
 	mInfoTextBox = mTrayMgr->createTextBox(OgreBites::TL_TOPLEFT, "GeoLocationInfo", "Flight Details:", 250,140);
 
 	// Set up Earth
-    mEarthObj = new MovingObject(mSceneManager, "geosphere8000.mesh", NULL, Ogre::Vector3(31,31,31));
-    //mEarthObj = new MovingObject(mSceneManager, "GlobeX.mesh", NULL, Ogre::Vector3(90,90,90));
-
+    mEarthObj = new MovingObject(mSceneManager, "GlobeX.mesh", NULL, Ogre::Vector3(80,80,80));
     mEarthObj->setPosition(Ogre::Vector3(0, 0, 0));
     mEarthObj->rotate(Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3(0,1,0)));
-
 
     mPlaneEmpty = new MovingObject(mSceneManager, "sphere.mesh", NULL, Ogre::Vector3::UNIT_SCALE);
     mPlaneEmpty->setPosition(Ogre::Vector3(0, 0, 0));
@@ -58,14 +52,14 @@ void World::Setup()
                          	 	0	,	Ogre::Math::Cos(theta)	,	Ogre::Math::Sin(theta),
 								0	,	-Ogre::Math::Sin(theta)	, 	Ogre::Math::Cos(theta));
 
-    // test *****
+    // empty object to rotate the plane
     mPlaneCentralEmpty = new MovingObject(mSceneManager, "fish.mesh", mPlaneEmpty, Ogre::Vector3(0.2,0.2,0.2));
     mPlaneCentralEmpty->setPosition(Ogre::Vector3(earth_radius+25,0,0));
     mPlaneCentralEmpty->setOrientation(Ogre::Matrix3(rotateAroundY));
     mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
     // Real Plane plane747
-    mRealPlane = new MovingObject(mSceneManager, "razor.mesh", mPlaneCentralEmpty, Ogre::Vector3(100,100,100));
+    mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(600,600,600));
 
 
     mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
@@ -123,7 +117,7 @@ void World::Think(float time)
 		 }
 
 
-		cout << "*** lat,long *** " << latitude << "," << longitude <<   "\n";
+		cout << "### lat,long: " << latitude << "," << longitude <<   "\n";
 
 		long_diff=lat_diff=0;
 
@@ -146,7 +140,7 @@ void World::Think(float time)
 		// set the direction/orientation of the plane
 		if (long_diff!=0 && lat_diff!=0) {
 
-			cout << ".............. lat_diff  : " << lat_diff << " .... longitude diff: " << long_diff << "\n";
+			cout << "### lat_diff: " << lat_diff << ",longitude diff: " << long_diff << "\n";
 
 			Ogre::Radian zAngle = Ogre::Radian(Ogre::Math::PI * -90 /180);
 			Ogre::Matrix3 rotateAroundZ2(Ogre::Math::Cos(zAngle), -Ogre::Math::Sin(zAngle), 0,
@@ -164,8 +158,6 @@ void World::Think(float time)
 					Ogre::Vector3(0,1,0)));
 
 		}
-
-		cout << ".........*******++++++++++++*********.....";
 	}
 	else if (token==380) {
 		token	= 0;

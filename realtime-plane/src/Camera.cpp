@@ -32,12 +32,12 @@ void TranslateCamera::Think(float time)
 	//mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(2), Ogre::Vector3(0,0,0.1)));
 
 	//mRenderCamera->lookAt(Ogre::Vector3(0,0,0));
-	//mRenderCamera->lookAt(mWorld->mPlane->getCurrentPosition()) ;
+	mRenderCamera->lookAt(mWorld->mRealPlane->getCurrentPosition()) ;
 
 	//mRenderCamera->move(Ogre::Vector3(-1,0.3,0.9));
 	// Any code needed here to move the camera about per frame
 	//  (use mRenderCamera to get the actual render camera, of course!)
-	mRenderCamera->getParentNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+	//mRenderCamera->getParentNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
 }
 
 void TranslateCamera::zoom(float time, bool zoomIn=true)

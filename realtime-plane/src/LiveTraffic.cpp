@@ -80,9 +80,9 @@ void LiveTraffic::fetchLiveData() {
 
         if (jsonReader.parse(*httpData.get(), jsonData))
         {
-            std::cout << "Successfully parsed JSON data" << std::endl;
-            std::cout << "\nJSON data received:" << std::endl;
-            std::cout << jsonData["states"][0].toStyledString() << std::endl;
+            //std::cout << "Successfully parsed JSON data" << std::endl;
+            //std::cout << "\nJSON data received:" << std::endl;
+            //std::cout << jsonData["states"][0].toStyledString() << std::endl;
 
             const std::size_t unixTimeMs(jsonData["time"].asUInt64());
             const std::string timeString(jsonData["time"].asString());

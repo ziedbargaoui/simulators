@@ -4,13 +4,13 @@
  *  Created on: Dec 8, 2018
  *      Author: zied
  */
-#include "main_simulator.h"
+#include "MainSimulator.h"
 #include "World.h"
 #include "InputHandler.h"
 #include "Camera.h"
 #include "MovingObject.h"
 
-
+using namespace std;
 
 MainSimulator::MainSimulator() : ApplicationContext("Real Time Plane - Simulation") {
 	root = 0;
@@ -28,12 +28,62 @@ MainSimulator::~MainSimulator() {
 
 void MainSimulator::loadResources() {
 	// Add our models to our resources and index it
-	ResourceGroupManager::getSingleton().addResourceLocation("Media/materials/textures/nvidia", "FileSystem");
-	ResourceGroupManager::getSingleton().addResourceLocation("Media/models/","FileSystem");
-	ResourceGroupManager::getSingleton().addResourceLocation("content/models/","FileSystem");
+	// TODO make loading the resources dynamic
+	//ResourceGroupManager::getSingleton().addResourceLocation("../Media/materials/textures/nvidia", "FileSystem");
+	//ResourceGroupManager::getSingleton().addResourceLocation("../Media/models/","FileSystem");
+	//ResourceGroupManager::getSingleton().addResourceLocation("../content/models/","FileSystem");
 
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+	
+	// DEBUG
+	ResourceGroupManager::LocationList ll = ResourceGroupManager::getSingleton().getResourceLocationList("General");
+
+	for (ResourceGroupManager::ResourceLocation loc : ll)
+	{
+		cout << "+++++" << loc.archive->getName() << " - " << loc.archive->getType() << endl;
+	}
 }
+
+
+
+void MainSimulator::go(void) {
+
+    initApp();
+    root->startRendering();
+    closeApp();
+
+    // clean up
+    destroyScene();
+}
+
+void MainSimulator::setup() {
+	// do not forget to call the base first
+	ApplicationContext::setup();
+	addInputListener(this);
+
+	// get a pointer to the already created root
+	root = getRoot();
+	scnMgr = root->createSceneManager();
+
+	createSpecialDebugMenu();
+
+	loadResources();
+
+	createLight();
+
+	createScene();
+
+	createCamera();
+
+	createViewports();
+
+	createFrameListener();
+
+	addInputListener(mTrayMgr);
+
+}
+
 
 
 // We will create a single frame listener, to handle our main event loop.  While we could
@@ -122,34 +172,6 @@ void MainSimulator::createSpecialDebugMenu() {
 	mTrayMgr->showLogo(TL_BOTTOMRIGHT);
 	mTrayMgr->hideCursor();
 }
-
-void MainSimulator::setup() {
-	// do not forget to call the base first
-	ApplicationContext::setup();
-	addInputListener(this);
-
-	// get a pointer to the already created root
-	root = getRoot();
-	scnMgr = root->createSceneManager();
-
-	createSpecialDebugMenu();
-
-	loadResources();
-
-	createLight();
-
-	createScene();
-
-	createCamera();
-
-	createViewports();
-
-	createFrameListener();
-
-	addInputListener(mTrayMgr);
-
-}
-
 bool MainSimulator::keyPressed(const KeyboardEvent& evt) {
 	if (evt.keysym.sym == SDLK_ESCAPE) {
 		getRoot()->queueEndRendering();
@@ -165,15 +187,5 @@ void MainSimulator::destroyScene() {
 	delete scnMgr;
 	delete camNode;
 	delete cam;
-}
-
-void MainSimulator::go(void) {
-
-    initApp();
-    root->startRendering();
-    closeApp();
-
-    // clean up
-    destroyScene();
 }
 

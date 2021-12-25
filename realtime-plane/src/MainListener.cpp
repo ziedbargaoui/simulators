@@ -25,11 +25,11 @@ bool MainListener::frameStarted(const Ogre::FrameEvent &evt)
 	}
 	mWorld->Think(time);
 	mInputHandler->Think(time);
-    mTranslateCamera->Think(time);
+    	mTranslateCamera->Think(time);
 
 	// Call think methods on any other managers / etc you want to add3
 
-    bool keepGoing = true;
+    	bool keepGoing = true;
 
 	// Ogre will shut down if a listener returns false.  We will shut everything down if
 	// either the user presses escape or the main render window is closed.  Feel free to
