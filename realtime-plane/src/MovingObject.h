@@ -1,9 +1,11 @@
 #include "OgreMatrix3.h"
-#include "OgreVector3.h"
+#include "Ogre.h"
 #include <iostream>
 
 //class Ogre::SceneManager;
 //class Ogre::SceneNode;
+
+using namespace Ogre;
 
 class MovingObject
 {
@@ -11,7 +13,7 @@ class MovingObject
 public:
     MovingObject(Ogre::SceneManager *sceneManager, const char *meshName, MovingObject *parent, Ogre::Vector3 scale);
 
-    Ogre::Matrix3 getOrientation() {return mOrientation;}
+    Matrix3 getOrientation() {return mOrientation;}
     Ogre::Vector3 getPosition() {return mPosition;}
     Ogre::Vector3 getCurrentPosition();
 

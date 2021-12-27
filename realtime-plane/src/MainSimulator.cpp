@@ -131,7 +131,7 @@ void MainSimulator::createLight() {
 
 void MainSimulator::createCamera() {
 
-	bool followPlane =0;
+	bool followPlane =1;
 	cam = scnMgr->createCamera("myCam");
 
 	if (followPlane) {

@@ -1,14 +1,16 @@
 cmake_minimum_required (VERSION 2.8)
 project(OgreTutorialsSample)
+set(APP OgreTutorialsSample)
 
 # required for Ogre 1.11+
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -lfreetype -lcurl -lOIS -ljsoncpp")
+# required for this project
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lfreetype -lcurl -lOIS -ljsoncpp")
 
 ## [discover_ogre]
 # specify which version and components you need
-find_package(OGRE 1.11 REQUIRED COMPONENTS Bites RTShaderSystem)
+find_package(OGRE 1.11)
 
 # copy resource.cfg next to our binaries where OGRE looks for it
 file(COPY resources.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -45,6 +47,6 @@ target_link_libraries(MainSimulator MainListener World ${OGRE_LIBRARIES})
 # this also sets the includes and pulls third party dependencies
 ## [discover_ogre]
 
-add_executable(1_FirstScene src/main.cpp)
+add_executable(Simulator src/main.cpp)
 
-target_link_libraries(1_FirstScene MainSimulator InputHandler ${OGRE_LIBRARIES} curl jsoncpp) 
+target_link_libraries(Simulator MainSimulator InputHandler ${OGRE_LIBRARIES} curl jsoncpp) 

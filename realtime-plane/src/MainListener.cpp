@@ -43,7 +43,7 @@ bool MainListener::frameStarted(const Ogre::FrameEvent &evt)
 	    mTranslateCamera->zoom(time,true);
 	}
 
-	if (mInputHandler->IsKeyDown(OIS::KC_MULTIPLY)) {
+	if (mInputHandler->IsKeyDown(OIS::KC_MINUS)) {
 	    mTranslateCamera->zoom(time,false);
 	}
 

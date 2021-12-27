@@ -3,38 +3,34 @@
 #include "OgreSceneNode.h"
 #include "Camera.h"
 #include "World.h"
-#include "OgreVector3.h"
+#include "Ogre.h"
 #include "InputHandler.h"
 #include "MovingObject.h"
 
 TranslateCamera::TranslateCamera(Ogre::Camera *renderCamera, World *world, InputHandler * ih, bool followPlane) :
-mRenderCamera(renderCamera), mWorld(world)
+mRenderCamera(renderCamera), 
+mWorld(world)
 {
 	if (followPlane) {
-		if (true) {
-			mRenderCamera->setPosition(Ogre::Vector3(500,150,500));
-			mRenderCamera->setDirection(Ogre::Vector3(-2,-0.6,2));
-		} else {
-			mRenderCamera->setPosition(Ogre::Vector3(50,7300,7600));
-			mRenderCamera->setDirection(Ogre::Vector3(-2,-2,0));
-		}
+		mRenderCamera->getParentSceneNode()->setPosition(mWorld->mRealPlane->getCurrentPosition()+Ogre::Vector3(0.0f,100.0f,2200.0f));
+		mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.001f), Ogre::Vector3(0.0f,0.0f,0.0f)));
+		
+		//FIXME for some reason the line below looks at the origin (probably parent node)
+		//mRenderCamera->getParentSceneNode()->lookAt(mWorld->mRealPlane->getCurrentPosition(),Node::TransformSpace::TS_WORLD) ;
+
 	} else {
-		mRenderCamera->setPosition(Ogre::Vector3(18000,0,0)); // viem on Europe/Africa
-		//mRenderCamera->setPosition(Ogre::Vector3(0,0,-3200)); // view on the Americas
-		mRenderCamera->lookAt(Ogre::Vector3(0,0,0));
+		mRenderCamera->getParentSceneNode()->setPosition(Ogre::Vector3(-0.0f,166.0f,0.0f));
+		mRenderCamera->getParentSceneNode()->lookAt(Ogre::Vector3(0.0f,0.0f,0.0f),Node::TransformSpace::TS_WORLD);
+
 	}
-	mRenderCamera->setNearClipDistance(2);
+	//mRenderCamera->setNearClipDistance(2);
 
 }
 
 void TranslateCamera::Think(float time)
 {
-	//mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(2), Ogre::Vector3(0,0,0.1)));
+	// mRenderCamera->getParentSceneNode()->rotate(Ogre::Vector3(-30.0f,0.0f,0.0f));
 
-	//mRenderCamera->lookAt(Ogre::Vector3(0,0,0));
-	mRenderCamera->lookAt(mWorld->mRealPlane->getCurrentPosition()) ;
-
-	//mRenderCamera->move(Ogre::Vector3(-1,0.3,0.9));
 	// Any code needed here to move the camera about per frame
 	//  (use mRenderCamera to get the actual render camera, of course!)
 	//mRenderCamera->getParentNode()->rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
@@ -43,8 +39,8 @@ void TranslateCamera::Think(float time)
 void TranslateCamera::zoom(float time, bool zoomIn=true)
 {
 	if (zoomIn) {
-		mRenderCamera->move(Ogre::Vector3(210,50,210));  //rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,10),Node::TransformSpace::TS_LOCAL);
 	} else {
-		mRenderCamera->move(Ogre::Vector3(-210,-50,-210));  //rotate(Ogre::Quaternion(Ogre::Degree(0.1),Ogre::Vector3(0, 1, 0)));
+		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,-10),Node::TransformSpace::TS_LOCAL);
 	}
 }

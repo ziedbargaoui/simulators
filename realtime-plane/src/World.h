@@ -5,9 +5,7 @@
 #include "OgreMath.h"
 #include "OgreSceneManager.h"
 #include "OgreSceneNode.h"
-#include "OgreVector3.h"
 #include "OgreSphere.h"
-#include "OgreVector3.h"
 #include "OgreRTShaderSystem.h"
 #include "OgreTrays.h"
 

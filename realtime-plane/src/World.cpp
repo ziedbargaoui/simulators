@@ -47,10 +47,10 @@ void World::Setup()
     mPlaneEmpty->setPosition(Ogre::Vector3(0, 0, 0));
 
 
-	Ogre::Radian theta = Ogre::Radian(Ogre::Math::PI * -90/180);
-    Ogre::Matrix3 rotateAroundY(1	,	0						, 	0,
-                         	 	0	,	Ogre::Math::Cos(theta)	,	Ogre::Math::Sin(theta),
-								0	,	-Ogre::Math::Sin(theta)	, 	Ogre::Math::Cos(theta));
+    Ogre::Radian theta = Ogre::Radian(Ogre::Math::PI * -90/180);
+    Ogre::Matrix3 rotateAroundY(1,	0, 	0,
+                         	0,	Ogre::Math::Cos(theta),	Ogre::Math::Sin(theta),
+				0,	-Ogre::Math::Sin(theta),	Ogre::Math::Cos(theta));
 
     // empty object to rotate the plane
     mPlaneCentralEmpty = new MovingObject(mSceneManager, "fish.mesh", mPlaneEmpty, Ogre::Vector3(0.2,0.2,0.2));
@@ -59,10 +59,10 @@ void World::Setup()
     mPlaneCentralEmpty->rotate(Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3(0,0,1)));
 
     // Real Plane plane747
-    mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(600,600,600));
+    mRealPlane = new MovingObject(mSceneManager, "plane747.mesh", mPlaneCentralEmpty, Ogre::Vector3(600.0f,600.0f,600.0f));
 
 
-    mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
+   /* mCube = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
     mSibenik = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
     mColumn = new MovingObject(mSceneManager, "column.mesh", NULL, Ogre::Vector3(0.1,0.1,0.1));
     mUVsphere = new MovingObject(mSceneManager, "cube.mesh", NULL, Ogre::Vector3(0.1,1,0.1));
@@ -73,7 +73,7 @@ void World::Setup()
     mColumn->setPosition(Ogre::Vector3(0, 0, -earth_radius));
     // 0,0
     mSibenik->setPosition(Ogre::Vector3(0, earth_radius, 0));
-    mUVsphere->setPosition(Ogre::Vector3(earth_radius, 0, 0));
+    mUVsphere->setPosition(Ogre::Vector3(earth_radius, 0, 0));*/
 
 
 }
