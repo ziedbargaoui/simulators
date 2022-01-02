@@ -28,33 +28,27 @@ MainSimulator::~MainSimulator() {
 
 void MainSimulator::loadResources() {
 	// Add our models to our resources and index it
-	// TODO make loading the resources dynamic
-	//ResourceGroupManager::getSingleton().addResourceLocation("../Media/materials/textures/nvidia", "FileSystem");
-	//ResourceGroupManager::getSingleton().addResourceLocation("../Media/models/","FileSystem");
-	//ResourceGroupManager::getSingleton().addResourceLocation("../content/models/","FileSystem");
-
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-
 	
 	// DEBUG
+	/*
 	ResourceGroupManager::LocationList ll = ResourceGroupManager::getSingleton().getResourceLocationList("General");
 
 	for (ResourceGroupManager::ResourceLocation loc : ll)
 	{
 		cout << "+++++" << loc.archive->getName() << " - " << loc.archive->getType() << endl;
 	}
+	*/
 }
-
-
 
 void MainSimulator::go(void) {
 
-    initApp();
-    root->startRendering();
-    closeApp();
+	initApp();
+	root->startRendering();
+	closeApp();
 
-    // clean up
-    destroyScene();
+	// clean up
+	destroyScene();
 }
 
 void MainSimulator::setup() {
@@ -129,9 +123,10 @@ void MainSimulator::createLight() {
 }
 
 
-void MainSimulator::createCamera() {
+void MainSimulator::createCamera() 
+{
 
-	bool followPlane =1;
+	bool followPlane =0;
 	cam = scnMgr->createCamera("myCam");
 
 	if (followPlane) {
@@ -139,12 +134,12 @@ void MainSimulator::createCamera() {
 	}
 	else {
 		camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
-		camNode->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(1,1,1)));
+		//camNode->rotate(Ogre::Quaternion(Ogre::Degree(90), Ogre::Vector3(1,1,1)));
 	}
 
 	camNode->attachObject(cam);
 
-    mTranslateCamera = new TranslateCamera(cam, mWorld,mInputHandler,followPlane);
+    	mTranslateCamera = new TranslateCamera(cam, mWorld,mInputHandler,followPlane);
 }
 
 void MainSimulator::createViewports() {
@@ -156,7 +151,7 @@ void MainSimulator::createViewports() {
 
 // Here is where we set up all of the non-rendering stuff (our world, various managers, etc)
 void MainSimulator::createScene() {
-    mInputHandler = new InputHandler(getRenderWindow());
+    	mInputHandler = new InputHandler(getRenderWindow());
 
 	mWorld = new World(scnMgr, mTrayMgr);
 }

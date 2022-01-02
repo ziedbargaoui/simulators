@@ -16,6 +16,7 @@ public:
     TranslateCamera(Ogre::Camera *renderCamera, World *world,InputHandler * ih, bool followPlane = true);
     void Think(float time);
     void zoom(float time, bool zoomIn);
+    void move(float time, int action);
 
     // If you have a different cameras, you'll want some acessor methods here.
     //  If your camera always stays still, you could remove this class entirely

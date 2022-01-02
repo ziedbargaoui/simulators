@@ -19,11 +19,16 @@ mWorld(world)
 		//mRenderCamera->getParentSceneNode()->lookAt(mWorld->mRealPlane->getCurrentPosition(),Node::TransformSpace::TS_WORLD) ;
 
 	} else {
-		mRenderCamera->getParentSceneNode()->setPosition(Ogre::Vector3(-0.0f,166.0f,0.0f));
-		mRenderCamera->getParentSceneNode()->lookAt(Ogre::Vector3(0.0f,0.0f,0.0f),Node::TransformSpace::TS_WORLD);
+		//mRenderCamera->getParentSceneNode()->setPosition(Ogre::Vector3(-0.0f,0.0f,18200.0f));
 
+		// looks at europe north pole on top, south pole on bottom
+		mRenderCamera->getParentSceneNode()->setPosition(Ogre::Vector3(19300.03f,0.0f,0.0f));
+		mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(90.0f), Ogre::Vector3(-1.0f,0.0f,0.0f)));
+		mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(180.0f), Ogre::Vector3(0.0f,0.0f,1.0f)));
+		mRenderCamera->getParentSceneNode()->rotate(Ogre::Quaternion(Ogre::Degree(-90.0f), Ogre::Vector3(0.0f,1.0f,0.0f)));
 	}
-	//mRenderCamera->setNearClipDistance(2);
+	
+	mRenderCamera->setNearClipDistance(2);
 
 }
 
@@ -39,8 +44,20 @@ void TranslateCamera::Think(float time)
 void TranslateCamera::zoom(float time, bool zoomIn=true)
 {
 	if (zoomIn) {
-		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,10),Node::TransformSpace::TS_LOCAL);
+		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,-50),Node::TransformSpace::TS_LOCAL);
 	} else {
-		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,-10),Node::TransformSpace::TS_LOCAL);
+		mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,50),Node::TransformSpace::TS_LOCAL);
 	}
 }
+
+
+void TranslateCamera::move(float time, int action=0)
+{
+	switch (action) { 
+		case 0:
+			mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,50),Node::TransformSpace::TS_LOCAL);
+		default:
+			mRenderCamera->getParentSceneNode()->translate(Ogre::Vector3(0,0,50),Node::TransformSpace::TS_LOCAL);
+	}
+}
+

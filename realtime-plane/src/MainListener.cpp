@@ -43,7 +43,32 @@ bool MainListener::frameStarted(const Ogre::FrameEvent &evt)
 	    mTranslateCamera->zoom(time,true);
 	}
 
-	if (mInputHandler->IsKeyDown(OIS::KC_MINUS)) {
+	if (mInputHandler->IsKeyDown(OIS::KC_SUBTRACT)) {
+	    mTranslateCamera->zoom(time,false);
+	}
+
+
+	if (mInputHandler->IsKeyDown(OIS::KC_W)) {
+	    mTranslateCamera->zoom(time,false);
+	}
+
+
+	if (mInputHandler->IsKeyDown(OIS::KC_X)) {
+	    mTranslateCamera->zoom(time,false);
+	}
+
+
+	if (mInputHandler->IsKeyDown(OIS::KC_A)) {
+	    mTranslateCamera->zoom(time,false);
+	}
+
+
+	if (mInputHandler->IsKeyDown(OIS::KC_D)) {
+	    mTranslateCamera->zoom(time,false);
+	}
+
+
+	if (mInputHandler->IsKeyDown(OIS::KC_S)) {
 	    mTranslateCamera->zoom(time,false);
 	}
 

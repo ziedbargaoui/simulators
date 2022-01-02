@@ -14,7 +14,7 @@ LiveTraffic::LiveTraffic() {
 
 LiveTraffic::~LiveTraffic() {
 	// TODO Auto-generated destructor stub
-	delete curl;
+	//delete curl;
 }
 
 namespace
@@ -97,7 +97,7 @@ void LiveTraffic::fetchLiveData() {
         else
         {
             std::cout << "Could not parse HTTP data as JSON" << std::endl;
-            std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
+            //std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
          }
     }
     else
