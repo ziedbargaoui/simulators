@@ -10,10 +10,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lfreetype -lcurl -lOIS -ljsoncpp")
 
 ## [discover_ogre]
 # specify which version and components you need
-find_package(OGRE 1.11)
-
+find_package(OGRE 1.11.3)
 # copy resource.cfg next to our binaries where OGRE looks for it
 file(COPY resources.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY plugins.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY content DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # add the source files as usual
@@ -22,7 +22,7 @@ add_library(MovingObject src/MovingObject.cpp)
 target_link_libraries(MovingObject ${OGRE_LIBRARIES})
 
 add_library(LiveTraffic src/LiveTraffic.cpp)
-target_link_libraries(LiveTraffic)
+target_link_libraries(LiveTraffic curl jsoncpp)
 
 add_library(ThreadData src/ThreadData.cpp)
 target_link_libraries(ThreadData LiveTraffic)
@@ -48,5 +48,4 @@ target_link_libraries(MainSimulator MainListener World ${OGRE_LIBRARIES})
 ## [discover_ogre]
 
 add_executable(Simulator src/main.cpp)
-
-target_link_libraries(Simulator MainSimulator InputHandler ${OGRE_LIBRARIES} curl jsoncpp) 
+target_link_libraries(Simulator MainSimulator InputHandler ${OGRE_LIBRARIES} curl OIS jsoncpp) 

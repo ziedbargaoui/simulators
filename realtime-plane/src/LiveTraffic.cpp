@@ -37,6 +37,7 @@ void LiveTraffic::fetchLiveData() {
     std::string url("https://opensky-network.org/api/states/all?icao24="+icao24);
 
     curl = curl_easy_init();
+    
 
     // Set remote URL.
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());

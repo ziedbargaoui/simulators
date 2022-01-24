@@ -29,16 +29,15 @@ MainSimulator::~MainSimulator() {
 void MainSimulator::loadResources() {
 	// Add our models to our resources and index it
 	ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-	
 	// DEBUG
-	/*
+	
 	ResourceGroupManager::LocationList ll = ResourceGroupManager::getSingleton().getResourceLocationList("General");
 
 	for (ResourceGroupManager::ResourceLocation loc : ll)
 	{
 		cout << "+++++" << loc.archive->getName() << " - " << loc.archive->getType() << endl;
 	}
-	*/
+	
 }
 
 void MainSimulator::go(void) {
@@ -117,7 +116,7 @@ void MainSimulator::createLight() {
 	lightdir.normalise();
 
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
-	light->setDirection(lightdir);
+	//light->setDirection(lightdir);
 	light->setDiffuseColour(Ogre::ColourValue::White);
 	light->setSpecularColour(Ogre::ColourValue(0.4, 0.4, 0.4));
 }

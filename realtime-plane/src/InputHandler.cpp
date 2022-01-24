@@ -11,13 +11,14 @@ InputHandler::InputHandler(Ogre::RenderWindow *renderWindow) :
 	size_t windowHnd = 0;
 	std::ostringstream windowHndStr;
 
+    renderWindow->setFullscreen(false,200,200);
+
 	renderWindow->getCustomAttribute("WINDOW", &windowHnd);
 	windowHndStr << windowHnd;
 	pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
 
 	mInputManager = OIS::InputManager::createInputSystem(pl);
-
-	mCurrentKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, false /* not buffered */ ));
+    mCurrentKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, false /* not buffered */ ));
 }
 
 
