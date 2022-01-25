@@ -10,7 +10,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lfreetype -lcurl -lOIS -ljsoncpp")
 
 ## [discover_ogre]
 # specify which version and components you need
-find_package(OGRE 1.11.3)
+# we need Version 1.12.9 (Rhagorthua)
+find_package(OGRE 1.12.9)
+
 # copy resource.cfg next to our binaries where OGRE looks for it
 file(COPY resources.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY plugins.cfg DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
